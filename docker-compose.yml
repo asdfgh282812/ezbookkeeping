@@ -1,0 +1,31 @@
+services:
+  ezbookkeeping:
+    image: mayswind/ezbookkeeping:latest
+    container_name: ezbookkeeping
+    ports:
+      - "8080:8080"
+    environment:
+      - EBK_DATABASE_TYPE=mysql
+      - EBK_DATABASE_HOST=db:3306
+      - EBK_DATABASE_NAME=ezbookkeeping
+      - EBK_DATABASE_USER=ezbookkeeping
+      - EBK_DATABASE_PASSWD=ezbookkeeping_password
+      - EBK_SECRET_KEY=ezbookkeeping_secret_key_please_change_it
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mariadb:latest
+    container_name: ezbookkeeping-db
+    environment:
+      - MARIADB_ROOT_PASSWORD=root_password
+      - MARIADB_DATABASE=ezbookkeeping
+      - MARIADB_USER=ezbookkeeping
+      - MARIADB_PASSWORD=ezbookkeeping_password
+    volumes:
+      - ezbookkeeping_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  ezbookkeeping_data:
